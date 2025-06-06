@@ -91,13 +91,15 @@ class DataSimulator:
                             self.previous_ivs[option_key] = new_iv
                             
                             # Create option data
+                            last_price = round(random.uniform(10, 500), 2)
                             option_data = {
                                 "symbol": symbol,
                                 "strike": strike,
                                 "expiry": expiry,
                                 "option_type": option_type,
                                 "iv": round(new_iv, 2),
-                                "last_price": round(random.uniform(10, 500), 2),
+                                "last_price": last_price,
+                                "price": last_price,
                                 "volume": random.randint(100, 10000),
                                 "oi": random.randint(1000, 50000)
                             }

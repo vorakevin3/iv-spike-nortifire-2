@@ -14,10 +14,10 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 
 # Import internal modules
-from .config import SCAN_INTERVAL_SECONDS, LOG_LEVEL, LOG_FORMAT
-from .data_simulator import fetch_option_data, get_simulation_stats
-from .detector import detect_spikes, get_detector_stats, get_recent_spikes
-from .notifier import send_multiple_spike_alerts, test_notifications, get_notification_stats
+from config import SCAN_INTERVAL_SECONDS, LOG_LEVEL, LOG_FORMAT
+from app.data_simulator import fetch_option_data, get_simulation_stats
+from app.detector import detect_spikes, get_detector_stats, get_recent_spikes
+from app.notifier import send_multiple_spike_alerts, test_notifications, get_notification_stats
 
 # Configure logging
 logging.basicConfig(level=getattr(logging, LOG_LEVEL), format=LOG_FORMAT)
@@ -39,6 +39,10 @@ async def monitor_iv_spikes():
         if not options_data:
             logger.warning("No option data received")
             return
+
+        # Debug: log keys of first option data item
+        if options_data:
+            logger.info(f"Option data keys sample: {list(options_data[0].keys())}")
 
         # Detect IV spikes
         spikes = detect_spikes(options_data)

@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 import math
 from dataclasses import dataclass
-from iv_spike_notifier.app.iv_calculator import implied_volatility, option_delta
+from app.iv_calculator import implied_volatility, option_delta
 
 @dataclass
 class IVSpikeAlert:
@@ -24,7 +24,7 @@ class IVSpikeAlert:
 def filter_options_by_delta(options: List[Dict[str, Any]], S: float, T: float, r: float) -> List[Dict[str, Any]]:
     """
     Filter options to include only those with abs(delta) around 0.40
-    options: list of dicts with keys 'K', 'price', 'type'
+    options: list of dicts with keys 'strike', 'last_price', 'option_type'
     S: spot price
     T: time to expiry in years
     r: risk-free rate
@@ -32,15 +32,15 @@ def filter_options_by_delta(options: List[Dict[str, Any]], S: float, T: float, r
     filtered = []
     for opt in options:
         iv = implied_volatility(
-            market_price=opt['price'],
+            market_price=opt['last_price'],
             S=S,
-            K=opt['K'],
+            K=opt['strike'],
             T=T,
             r=r,
-            option_type=opt['type']
+            option_type=opt['option_type']
         )
         if iv is not None:
-            delta = option_delta(S, opt['K'], T, r, iv, opt['type'])
+            delta = option_delta(S, opt['strike'], T, r, iv, opt['option_type'])
             if 0.38 <= abs(delta) <= 0.42:
                 filtered.append({**opt, 'iv': iv, 'delta': delta})
     return filtered

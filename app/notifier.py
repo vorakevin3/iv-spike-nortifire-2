@@ -6,7 +6,7 @@ import requests
 import logging
 from typing import List, Dict, Any, Optional
 from abc import ABC, abstractmethod
-from .config import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+from config import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 from .detector import IVSpikeAlert
 
 logger = logging.getLogger(__name__)
